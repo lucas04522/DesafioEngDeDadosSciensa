@@ -11,3 +11,9 @@ pageview =  spark.read.format('json').load(path)
 pageview.createOrReplaceTempView('pageviews')
 pageview = spark.sql('SELECT count(pageviews) FROM pageviews')
 
+print("A quantidade de pageviews é ", pageviews)
+
+#Número de seções por usuário
+
+#
+
