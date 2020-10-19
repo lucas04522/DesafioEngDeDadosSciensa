@@ -5,7 +5,7 @@ from  pyspark.sql  import  SparkSession
 
 
 #Cria função para consultar o dado desejado. Digitar a query SQL sempre com from dado.
-def consulta(path, query)
+def consulta(query, path)
     dado = spark.read.format('json').load(path)
     dado.createOrReplaceTempView('dado')
     dado = spark.sql(query)
@@ -15,14 +15,14 @@ def consulta(path, query)
 path1 = path de armazenamento da TB_TOTALS
 query1 = "SELECT SUM(pageViews) FROM dado"
 
-print("O resultado é " + consulta(path1, query1))
+print("O resultado é " + consulta(query1, path1))
 
 
 #Número de sessões por usuário
 path2 = path de armazenamento da TB_VISITA
 query2 = "SELECT ID, visitNumber FROM dado")
 
-print("O resultado é ",consulta(path2, query2))
+print("O resultado é ",consulta(query2, path2))
 
 #Sessões distintas por data
 
@@ -35,14 +35,14 @@ print('O resultado desse tópico é ', consulta(query4, path3))
 #Média de duração da sessão por data
 
 path4 = path de armazenamento da TB_VISITA
-query5 = "SELECT visitID, data FROM dado"
+query5 = "SELECT visitId, data FROM dado"
 consulta(query5, path4).createOrReplaceTempView("TabelaVisita")
 
 path5 = path de armazenamento da TB_TOTAL
-query6 = "SELECT timeOnSite, visitID FROM dado"
+query6 = "SELECT timeOnSite, visitId FROM dado"
 consulta(query6, path5).createOrReplaceTempView("TabelaTotal")
 
-tblCompleta = spark.sql("SELECT timeOnSite, TabelaVisita.visitID, data FROM TabelaVisita INNER JOIN TabelaTotal on TabelaVisita.visitID = TabelaTotal.visitID")
+tblCompleta = spark.sql("SELECT timeOnSite, TabelaVisita.visitId, data FROM TabelaVisita INNER JOIN TabelaTotal on TabelaVisita.visitId = TabelaTotal.visitId")
 tblCompleta.createOrReplaceTempView("tblCompleta")
 
 query9 = "SELECT DISTINCT(data) FROM dado"
