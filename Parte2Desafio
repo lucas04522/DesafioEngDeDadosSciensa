@@ -1,0 +1,13 @@
+
+from pyspark import SparkContext
+import  org.apache.spark.sql.SparkSession
+from  pyspark.sql  import  SparkSession
+
+#Contagem de pageviews
+
+#Path de armazenamento da tabela TB_Totals
+path = path de armazenamento da TB_TOTALS
+pageview =  spark.read.format('json').load(path)
+pageview.createOrReplaceTempView('pageviews')
+pageview = spark.sql('SELECT count(pageviews) FROM pageviews')
+
