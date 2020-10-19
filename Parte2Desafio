@@ -3,17 +3,52 @@ from pyspark import SparkContext
 import  org.apache.spark.sql.SparkSession
 from  pyspark.sql  import  SparkSession
 
+
+#Cria função para consultar o dado desejado. Digitar a query SQL sempre com from dado.
+def consulta(path, query)
+    dado = spark.read.format('json').load(path)
+    dado.createOrReplaceTempView('dado')
+    dado = spark.sql(query)
+    return dado
+    
 #Contagem de pageviews
+path1 = path de armazenamento da TB_TOTALS
+query1 = "SELECT SUM(pageViews) FROM dado"
 
-#Path de armazenamento da tabela TB_Totals
-path = path de armazenamento da TB_TOTALS
-pageview =  spark.read.format('json').load(path)
-pageview.createOrReplaceTempView('pageviews')
-pageview = spark.sql('SELECT count(pageviews) FROM pageviews')
+print("O resultado é " + consulta(path1, query1))
 
-print("A quantidade de pageviews é ", pageviews)
 
-#Número de seções por usuário
+#Número de sessões por usuário
+path2 = path de armazenamento da TB_VISITA
+query2 = "SELECT ID, visitNumber FROM dado")
 
-#
+print("O resultado é ",consulta(path2, query2))
+
+#Sessões distintas por data
+
+path3 = path de armazenamento da TB_VISITA
+query3 = "SELECT distinct(data) FROM dado"
+query4 = "SELECT count(visitNumber) FROM dado WHERE data = " + (consulta(query3, path3)
+
+print('O resultado desse tópico é ', consulta(query4, path3))
+
+#Média de duração da sessão por data
+
+path4 = path de armazenamento da TB_VISITA
+query5 = "SELECT visitID, data FROM dado"
+consulta(query5, path4).createOrReplaceTempView("TabelaVisita")
+
+path5 = path de armazenamento da TB_TOTAL
+query6 = "SELECT timeOnSite, visitID FROM dado"
+consulta(query6, path5).createOrReplaceTempView("TabelaTotal")
+
+tblCompleta = spark.sql("SELECT timeOnSite, TabelaVisita.visitID, data FROM TabelaVisita INNER JOIN TabelaTotal on TabelaVisita.visitID = TabelaTotal.visitID")
+tblCompleta.createOrReplaceTempView("tblCompleta")
+
+query9 = "SELECT DISTINCT(data) FROM dado"
+resultado = spark.sql("SELECT avg(timeOnSite) FROM tblCompleta WHERE data = "+ consulta(query9, path4))
+
+print(O resultado é "+ resultado)
+
+#Sessões diárias por tipo de browser
 
